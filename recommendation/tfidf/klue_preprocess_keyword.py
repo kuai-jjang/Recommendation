@@ -66,7 +66,7 @@ if __name__=="__main__":
         df_extract=df[df.keyword_sent.str.len()!=0] #keyword없는 것 제외
         df_extract.drop(['trial'],axis=1,inplace=True)
 
-        print(df.keyword_sent.head(5))
+        print(df_extract.head(5))
         semester=i.split('\\')[-1][:-4]
         print(semester)
         save_name='/'.join(i.split('\\')[:-2])+'/'+'prep'+'/'+semester+'_'+str(args.keyword)
