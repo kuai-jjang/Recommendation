@@ -1,4 +1,4 @@
-from w2vec import word2vec
+from w2vec import word2vec,negative_sampling
 import torch
 import torch.nn as nn
 import torch
@@ -50,6 +50,7 @@ if __name__=="__main__":
     parser.add_argument('--vocab_dir',default="./preprocessing/my_vocab_freq_3.pickle", help='vocab?',type=str)
     parser.add_argument('--make_skipgram',default=False, help='make skipgram?',type=str)
     parser.add_argument('--skipgram_dataset',default='./skip_datasets.pickle', help='skipgram dataset?',type=str)
+    parser.add_argument('--save_dir',default='./', help='savde directory?',type=str)
     
     args = parser.parse_args()
 
@@ -78,19 +79,24 @@ if __name__=="__main__":
     my_dataset = TensorDataset(X,y) # create your datset
     batchsize=16
     my_dataloader = DataLoader(my_dataset,batch_size=batchsize) # create your dataloader
-    
+
+
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     model=word2vec(vocab_len=len(w2i)+2) #unk이랑 torch.embedding 이 0부터 시작이라는 것을 몰랐다... 
+    model.to(device)
+
+
     print(len(w2i))
     
 
     optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
-    criterion = nn.CrossEntropyLoss()
-
+    #criterion = negative_sampling()
+    criterion=nn.CrossEntropyLoss()
 
     # print(iter(my_dataloader).next())
     
-    epochs=10
-
+    epochs=1
+    
     for epoch in range(epochs):
         running_loss=0.0
         for i,data in enumerate(my_dataloader,0):
@@ -101,6 +107,8 @@ if __name__=="__main__":
 
             outputs=model(inputs).view(batchsize,-1)
             loss=criterion(outputs,labels)
+        
+            #loss=negative_sampling(labels,outputs,vocab_len=len(w2i),n=10)
             loss.backward()
             optimizer.step()
 
@@ -109,14 +117,5 @@ if __name__=="__main__":
                 print('[%d, %5d] loss: %.5f' %(epoch + 1, i + 1, running_loss / 50))
                 running_loss = 0.0
 
+            torch.save(model.state_dict(), save_dir)
 
-    # for i in epochs:
-    #     y_pred=
-    #     y_true=
-    #     loss=F.nll_loss(y_pred.view(-1,1),y_true)
-
-
-    # y_true=torch.tensor([1])
-    # y_pred=model.forward(torch.tensor([1]))
-
-    # print(loss)

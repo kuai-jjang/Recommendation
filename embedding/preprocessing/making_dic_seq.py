@@ -3,6 +3,7 @@ import ast
 import re
 import time
 import numpy as np
+import argparse
 
 from konlpy.tag import Okt
 import pickle
@@ -48,42 +49,55 @@ class making_dict:
 
 
 if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--data_dir',default=r'C:\tensor_code\kluebot\data\raw\2017_1.csv', help='datafile',type=str)
+    parser.add_argument('--making_vocab',default=False, help='make vocab?',type=bool)
+    parser.add_argument('--make_seq',default=False, help='make seq?',type=bool)
     
-    my_data=pd.read_csv(r'C:\tensor_code\kluebot\data\raw\2017_1.csv')
+    args = parser.parse_args()
+
+    #강의평 데이터 불러오기
+    my_data=pd.read_csv(args.data_dir)
     lecture_sentences=preprocessing(my_data.LectureEval.values)
 
-
+    #ㄱ-ㅎ제거
     k=re.compile('[ㄱ-ㅎ]+|')
     sample_sentence=list(map(lambda x:k.sub('',x),lecture_sentences))
     tokenizer=Okt()
 
-    my_vocab={}
-    freq={}
-    trial=making_dict(tokenizer,sample_sentence,my_vocab)
-    trial.make_vocab()
+    #사전 만들기
+    if args.making_vocab:
+        my_vocab={}
+        freq={}
+        trial=making_dict(tokenizer,sample_sentence,my_vocab)
+        trial.make_vocab()
+        #사전 저장
+        with open('./my_vocab_freq_3.pickle','wb') as handle:
+            pickle.dump(my_vocab,handle)
+    #사전 불러오기
 
-    with open('./my_vocab_freq_2.pickle','wb') as handle:
-        pickle.dump(my_vocab,handle)
-    with open('./my_vocab_freq_2.pickle','rb') as handle:
-        w2i=pickle.load(handle)
+    if args.make_seq:
+        with open('./my_vocab_freq_3.pickle','rb') as handle:
+            w2i=pickle.load(handle)
 
-    ####여기서부터 seq_idx 만들기
-
-    w2i_default=defaultdict(lambda: len(w2i)+1,w2i)
-    #default dict 값이 unk
-    w2i['unk']=len(w2i)+1
-
-    # make_seq=making_seq(Okt())
-    
-    step=0
-    length_sent=len(sample_sentence)
-    for i in sample_sentence:
-        step+=1
-        if step%1000==0:
-            print(step,'/',length_sent)
-        tokenized=tokenizer.pos(i)
-        seq=list(map(lambda x:a[x],tokenized))
-        with open('./sentence2idx.txt', 'a') as f:
-            for item in seq:
-                f.write("%s " % item)
-            f.write('\n')
+        ####여기서부터 seq_idx 만들기
+        vocab_size=len(w2i)
+        print(vocab_size)
+        w2i_default=defaultdict(lambda:vocab_size+1,w2i)
+        #default dict 값이 unk
+        #w2i['unk']=len(w2i)+1
+        # make_seq=making_seq(Okt())
+        
+        step=0
+        length_sent=len(sample_sentence)
+        for i in sample_sentence:
+            step+=1
+            if step%1000==0:
+                print(step,'/',length_sent)
+            tokenized=tokenizer.pos(i)
+            seq=list(map(lambda x:w2i_default[x],tokenized))
+            with open('./sentence4idx.txt', 'a') as f:
+                for item in seq:
+                    f.write("%s " % item)
+                f.write('\n')
