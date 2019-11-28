@@ -101,8 +101,9 @@ if __name__=="__main__":
     for epoch in range(epochs):
         running_loss=0.0
         for i,data in enumerate(my_dataloader,0):
-            inputs,labels=data.to(device)
-            labels=labels.view(1,-1)[0]
+            inputs,labels=data
+            labels=labels.view(1,-1)[0].to(device)
+            inputs=inputs.to(device)
 
             optimizer.zero_grad()
 
