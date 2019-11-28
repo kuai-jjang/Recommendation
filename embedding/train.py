@@ -80,7 +80,10 @@ if __name__=="__main__":
 
     my_dataset = TensorDataset(X,y) # create your datset
     batchsize=16
-    my_dataloader = DataLoader(my_dataset,batch_size=batchsize) # create your dataloader
+
+
+
+    my_dataloader = DataLoader(my_dataset,batch_size=batchsize,shuffle = True,drop_last=True) # create your dataloader
 
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -116,7 +119,7 @@ if __name__=="__main__":
             optimizer.step()
 
             running_loss+=loss.item()
-            if i % 49 == 0:    # print every 2000 mini-batches
+            if i % 499 == 0:    # print every 2000 mini-batches
                 print('[%d, %5d] loss: %.5f' %(epoch + 1, i + 1, running_loss / 50))
                 running_loss = 0.0
 
