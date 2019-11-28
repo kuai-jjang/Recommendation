@@ -73,8 +73,8 @@ if __name__=="__main__":
         X,y=skip_gram_set[0],skip_gram_set[1]
 
 
-    X=torch.tensor(X).view(-1,1).to(device)
-    y=torch.tensor(y).view(-1,1).to(devie) #[0]으로 해줘야 batch 단위로 slicing 가능: ex) tensor([1, 2, 3])
+    X=torch.tensor(X).view(-1,1)
+    y=torch.tensor(y).view(-1,1)#[0]으로 해줘야 batch 단위로 slicing 가능: ex) tensor([1, 2, 3])
 
 
     my_dataset = TensorDataset(X,y) # create your datset
