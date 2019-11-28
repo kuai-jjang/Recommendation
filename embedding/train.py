@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from w2vec import word2vec,negative_sampling
 import torch
 import torch.nn as nn
@@ -10,9 +12,8 @@ import numpy as np
 import argparse
 import pickle
 
-##TODO
+##TODOgenius0142
 
-### sequence 저장 형식 바꾸기
 
 class skipgram:
     def __init__(self,finename,window_size=2):
@@ -50,7 +51,7 @@ if __name__=="__main__":
     parser.add_argument('--vocab_dir',default="./preprocessing/my_vocab_freq_3.pickle", help='vocab?',type=str)
     parser.add_argument('--make_skipgram',default=False, help='make skipgram?',type=str)
     parser.add_argument('--skipgram_dataset',default='./skip_datasets.pickle', help='skipgram dataset?',type=str)
-    parser.add_argument('--save_dir',default='./', help='savde directory?',type=str)
+    parser.add_argument('--save_dir',default='C:\tensor_code', help='savde directory?',type=str)
     
     args = parser.parse_args()
 
@@ -72,8 +73,8 @@ if __name__=="__main__":
         X,y=skip_gram_set[0],skip_gram_set[1]
 
 
-    X=torch.tensor(X).view(-1,1)
-    y=torch.tensor(y).view(-1,1) #[0]으로 해줘야 batch 단위로 slicing 가능: ex) tensor([1, 2, 3])
+    X=torch.tensor(X).view(-1,1).to(device)
+    y=torch.tensor(y).view(-1,1).to(devie) #[0]으로 해줘야 batch 단위로 slicing 가능: ex) tensor([1, 2, 3])
 
 
     my_dataset = TensorDataset(X,y) # create your datset
@@ -105,7 +106,7 @@ if __name__=="__main__":
 
             optimizer.zero_grad()
 
-            outputs=model(inputs).view(batchsize,-1)
+            outputs=model(inputs).view(batchsize,-1).to(device)
             loss=criterion(outputs,labels)
         
             #loss=negative_sampling(labels,outputs,vocab_len=len(w2i),n=10)
@@ -117,5 +118,5 @@ if __name__=="__main__":
                 print('[%d, %5d] loss: %.5f' %(epoch + 1, i + 1, running_loss / 50))
                 running_loss = 0.0
 
-            torch.save(model.state_dict(), save_dir)
+            #torch.save(model.state_dict(),args.save_dir)
 
