@@ -123,5 +123,5 @@ if __name__=="__main__":
                 print('[%d, %5d] loss: %.5f' %(epoch + 1, i + 1, running_loss / 499))
                 running_loss = 0.0
 
-            #torch.save(model.state_dict(),args.save_dir)
+            torch.save(model.state_dict(),args.save_dir)
 
