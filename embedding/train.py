@@ -51,7 +51,7 @@ if __name__=="__main__":
     parser.add_argument('--vocab_dir',default="./preprocessing/my_vocab_freq_3.pickle", help='vocab?',type=str)
     parser.add_argument('--make_skipgram',default=False, help='make skipgram?',type=str)
     parser.add_argument('--skipgram_dataset',default='./skip_datasets.pickle', help='skipgram dataset?',type=str)
-    parser.add_argument('--save_dir',default='./', help='savde directory?',type=str)
+    parser.add_argument('--save_dir',default='./w2v_withoud_ns', help='savde directory?',type=str)
     
     args = parser.parse_args()
 
@@ -123,5 +123,5 @@ if __name__=="__main__":
                 print('[%d, %5d] loss: %.5f' %(epoch + 1, i + 1, running_loss / 499))
                 running_loss = 0.0
 
-            torch.save(model.state_dict(),args.save_dir)
+    torch.save(model.state_dict(),args.save_dir)
 
