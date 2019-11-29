@@ -8,7 +8,7 @@
 ## 형태소 분석기 성능  
 ![Performance](./output/performance.png)
 
-##word frequency
+## word frequency
 ![word freq](./output/word_freq_pre.png)
 ## TODO
 
