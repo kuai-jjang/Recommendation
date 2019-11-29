@@ -22,48 +22,57 @@ class making_dict:
 
     def make_vocab(self):
         _=list(map(lambda x:self.tokenizing(x),self.sentences))
-        
+
     def tokenizing(self,x):
+
         self.step+=1
         if self.step%1000==0:
             print(self.step,'/',self.len_sent)
         self.tokens=self.tokenizer.pos(x)
         for i in self.tokens:
-            self.update_dict(i)
+            if i[1] not in ['Josa','Suffix','Foreign','Punctuation']:
+                self.update_dict(i)
             
     def update_dict(self,token):
-        if token not in self.vocab:
-            self.check_freq(token)
+        self.check_freq(token)
             
     def check_freq(self,token):
+
         if token not in freq:
             freq[token]=1
         else:
-            self.istwo(token)
-    def istwo(self,token):
-        if freq[token]<=self.n-1:
-            freq[token]+=1
+            self.update_freq(token)
+
+    def update_freq(self,token):
+        
+        freq[token]+=1
         if freq[token]==self.n:
             self.vocab[token]=len(self.vocab)+1
-            del  freq[token]
+ 
 
 
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--data_dir',default=r'C:\tensor_code\kluebot\data\raw\2017_1.csv', help='datafile',type=str)
-    parser.add_argument('--making_vocab',default=False, help='make vocab?',type=bool)
-    parser.add_argument('--make_seq',default=False, help='make seq?',type=bool)
+    parser.add_argument('--making_vocab',default=True, help='make vocab?',type=bool)
+    parser.add_argument('--make_seq',default=True, help='make seq?',type=bool)
     
+    parser.add_argument('--vocab_name',default='./without_josa_etc', help='vocab_name?',type=str)
+    parser.add_argument('--seq_name',default='./seq_without_josa_etc', help='seq_name?',type=str)
+    
+
     args = parser.parse_args()
 
     #강의평 데이터 불러오기
     my_data=pd.read_csv(args.data_dir)
     lecture_sentences=preprocessing(my_data.LectureEval.values)
 
-    #ㄱ-ㅎ제거
+    #ㄱ-ㅎ제거,'\n'
     k=re.compile('[ㄱ-ㅎ]+|')
     sample_sentence=list(map(lambda x:k.sub('',x),lecture_sentences))
+    sample_sentence=list(map(lambda x:re.sub('\n','',x),sample_sentence))
+
     tokenizer=Okt()
 
     #사전 만들기
@@ -73,12 +82,14 @@ if __name__ == '__main__':
         trial=making_dict(tokenizer,sample_sentence,my_vocab)
         trial.make_vocab()
         #사전 저장
-        with open('./my_vocab_freq_3.pickle','wb') as handle:
+        with open(args.vocab_name,'wb') as handle:  #빈도수랑 사전만드는 분리하고 싶다
             pickle.dump(my_vocab,handle)
+        with open('./my_vocab_frequency','wb') as f:
+            pickle.dump(freq,f)
     #사전 불러오기
 
     if args.make_seq:
-        with open('./my_vocab_freq_3.pickle','rb') as handle:
+        with open(args.vocab_name,'rb') as handle:
             w2i=pickle.load(handle)
 
         ####여기서부터 seq_idx 만들기
@@ -96,8 +107,9 @@ if __name__ == '__main__':
             if step%1000==0:
                 print(step,'/',length_sent)
             tokenized=tokenizer.pos(i)
+            tokenized=list(filter(lambda x:x[1] not in ['Josa','Suffix','Foreign','Punctuation'],tokenized))
             seq=list(map(lambda x:w2i_default[x],tokenized))
-            with open('./sentence4idx.txt', 'a') as f:
+            with open(args.seq_name+'.txt', 'a') as f:
                 for item in seq:
                     f.write("%s " % item)
                 f.write('\n')
