@@ -53,6 +53,7 @@ if __name__=="__main__":
     parser.add_argument('--make_skipgram',default=False, help='make skipgram?',type=bool)
     parser.add_argument('--skipgram_dataset',default='./skip_datasets_witoud_josa.pickle', help='skipgram dataset?',type=str)
     parser.add_argument('--save_dir',default='./w2v_withoud_ns', help='savde directory?',type=str)
+    parser.add_argument('--load_dir',default='.', help='load directory?',type=str)
     
     parser.add_argument('--epoch',default=3, help='epoch?',type=int)
     
@@ -63,55 +64,50 @@ if __name__=="__main__":
 
     #사전 불러오기
     with open(args.vocab_dir,'rb') as f: #defaultdict으로 바꿔야됨
-
         w2i=pickle.load(f)
 
+    #빈도수 사전 불러오기
     with open(args.vocabfreq_dir,'rb') as f: #defaultdict으로 바꿔야됨
-
         freq_dic=pickle.load(f)
 
 
     #skipgram dataset 만들기 -> pickle로 저장해두는게 편할듯?
-
     if args.make_skipgram:  
         X,y=skipgram('./preprocessing/seq_without_josa_etc.txt',window_size).reading()
         with open('./skip_datasets_witoud_josa.pickle','wb') as f :
             pickle.dump([X,y],f)
-
+    #skipgram dataset 불러오기
     with open(args.skipgram_dataset,'rb') as f :
         skip_gram_set=pickle.load(f)
         X,y=skip_gram_set[0],skip_gram_set[1]
 
 
     X=torch.tensor(X).view(-1,1)
-    y=torch.tensor(y).view(-1,1)#[0]으로 해줘야 batch 단위로 slicing 가능: ex) tensor([1, 2, 3])
+    y=torch.tensor(y).view(-1,1) #[0]으로 해줘야 batch 단위로 slicing 가능: ex) tensor([1, 2, 3])
 
 
-    my_dataset = TensorDataset(X,y) # create your datset
+    my_dataset = TensorDataset(X,y) #create your datset
     batchsize=16
-
-
-
-    my_dataloader = DataLoader(my_dataset,batch_size=batchsize,shuffle = True,drop_last=True) # create your dataloader
-
+    my_dataloader = DataLoader(my_dataset,batch_size=batchsize,shuffle = True,drop_last=True) #create your dataloader
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     model=word2vec(vocab_len=len(w2i)+2) #unk이랑 torch.embedding 이 0부터 시작이라는 것을 몰랐다... 
-    model.to(device)
-
-
-    print('vocab size:',len(w2i))
-    
-
     optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
-    #criterion = negative_sampling()
-    criterion=nn.CrossEntropyLoss()
 
-    # print(iter(my_dataloader).next())
+    if len(args.load_dir)>1:
+        checkpoint=torch.load(args.load_dir)
+        start_epoch=checkpoint['epochs']+1
+        model.load_state_dict(checkpoint['state_dict'])
+        optimizer.load_state_dict(checkpoint['optimizer'])
+    else:
+        start_epoch=0
+
+
+    model.to(device)
+    criterion=nn.CrossEntropyLoss()
+    epochs=start_epoch+args.epoch
     
-    epochs=args.epoch
-    
-    for epoch in range(epochs):
+    for epoch in range(start_epoch,epochs+1):
         running_loss=0.0
         for i,data in enumerate(my_dataloader,0):
             inputs,labels=data
