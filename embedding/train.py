@@ -53,13 +53,16 @@ if __name__=="__main__":
     parser.add_argument('--skipgram_dataset',default='./skip_datasets_witoud_josa.pickle', help='skipgram dataset?',type=str)
     parser.add_argument('--save_dir',default='./w2v_withoud_ns', help='savde directory?',type=str)
     
+    parser.add_argument('--epoch',default=3, help='epoch?',type=int)
+    
+    
     args = parser.parse_args()
 
     window_size=2
 
     #사전 불러오기
     with open(args.vocab_dir,'rb') as f: #defaultdict으로 바꿔야됨
-        print('vocab_dir',args.vocab_dir)
+
         w2i=pickle.load(f)
 
     #skipgram dataset 만들기 -> pickle로 저장해두는게 편할듯?
@@ -91,7 +94,7 @@ if __name__=="__main__":
     model.to(device)
 
 
-    print(len(w2i))
+    print('vocab size:',len(w2i))
     
 
     optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
@@ -100,7 +103,7 @@ if __name__=="__main__":
 
     # print(iter(my_dataloader).next())
     
-    epochs=1
+    epochs=args.epoch
     
     for epoch in range(epochs):
         running_loss=0.0
