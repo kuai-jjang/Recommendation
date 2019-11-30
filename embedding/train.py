@@ -49,6 +49,7 @@ if __name__=="__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--vocab_dir',default="./preprocessing/without_josa_etc", help='vocab?',type=str)
+    parser.add_argument('--vocabfreq_dir',default="./preprocessing/my_vocab_frequency", help='vocab?',type=str)
     parser.add_argument('--make_skipgram',default=False, help='make skipgram?',type=bool)
     parser.add_argument('--skipgram_dataset',default='./skip_datasets_witoud_josa.pickle', help='skipgram dataset?',type=str)
     parser.add_argument('--save_dir',default='./w2v_withoud_ns', help='savde directory?',type=str)
@@ -64,6 +65,11 @@ if __name__=="__main__":
     with open(args.vocab_dir,'rb') as f: #defaultdict으로 바꿔야됨
 
         w2i=pickle.load(f)
+
+    with open(args.vocabfreq_dir,'rb') as f: #defaultdict으로 바꿔야됨
+
+        freq_dic=pickle.load(f)
+
 
     #skipgram dataset 만들기 -> pickle로 저장해두는게 편할듯?
 
@@ -127,4 +133,5 @@ if __name__=="__main__":
                 running_loss = 0.0
 
     torch.save(model.state_dict(),args.save_dir)
+    torch.save(optimizer.state_dict(),args.save_dir+'_opt')
 
