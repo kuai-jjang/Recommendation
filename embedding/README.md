@@ -14,7 +14,7 @@
 
 ## word2vec 결과  
 embedding된 vector에 대해서 cosine similarity로 유사도를 구해보면 아래와 같다.
-![word sim](./sim_word_cos.png)
+![word sim](./output/sim_word_cos.png)
 
 
 ## TODO
