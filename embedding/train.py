@@ -48,9 +48,9 @@ class skipgram:
 if __name__=="__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--vocab_dir',default="./preprocessing/my_vocab_freq_3.pickle", help='vocab?',type=str)
-    parser.add_argument('--make_skipgram',default=False, help='make skipgram?',type=str)
-    parser.add_argument('--skipgram_dataset',default='./skip_datasets.pickle', help='skipgram dataset?',type=str)
+    parser.add_argument('--vocab_dir',default="./preprocessing/without_josa_etc", help='vocab?',type=str)
+    parser.add_argument('--make_skipgram',default=False, help='make skipgram?',type=bool)
+    parser.add_argument('--skipgram_dataset',default='./skip_datasets_witoud_josa.pickle', help='skipgram dataset?',type=str)
     parser.add_argument('--save_dir',default='./w2v_withoud_ns', help='savde directory?',type=str)
     
     args = parser.parse_args()
@@ -65,8 +65,8 @@ if __name__=="__main__":
     #skipgram dataset 만들기 -> pickle로 저장해두는게 편할듯?
 
     if args.make_skipgram:  
-        X,y=skipgram('./preprocessing/sentence4idx.txt',window_size).reading()
-        with open('./skip_datasets.pickle','wb') as f :
+        X,y=skipgram('./preprocessing/seq_without_josa_etc.txt',window_size).reading()
+        with open('./skip_datasets_witoud_josa.pickle','wb') as f :
             pickle.dump([X,y],f)
 
     with open(args.skipgram_dataset,'rb') as f :
