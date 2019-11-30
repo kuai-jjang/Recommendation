@@ -96,7 +96,7 @@ if __name__=="__main__":
 
     if len(args.load_dir)>1:
         checkpoint=torch.load(args.load_dir)
-        start_epoch=checkpoint['epochs']+1
+        start_epoch=checkpoint['epoch']+1
         model.load_state_dict(checkpoint['state_dict'])
         optimizer.load_state_dict(checkpoint['optimizer'])
     else:
