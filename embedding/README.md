@@ -10,6 +10,10 @@
 
 ## word frequency
 ![word freq](./output/word_freq_pre.png)
+
+
+'Josa','Suffix','Foreign','Punctuation' 제거 후 vocab size 28730에서 28101으로 줄어들었다.  
+
 ## TODO
 
 1. komoran  
