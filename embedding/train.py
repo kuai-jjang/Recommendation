@@ -56,7 +56,7 @@ if __name__=="__main__":
     parser.add_argument('--load_dir',default='.', help='load directory?',type=str)
     
     parser.add_argument('--epoch',default=3, help='epoch?',type=int)
-    
+    parser.add_argument('--lr',default=0.0001, help='lr?',type=float)
     
     args = parser.parse_args()
 
@@ -92,7 +92,7 @@ if __name__=="__main__":
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     model=word2vec(vocab_len=len(w2i)+2) #unk이랑 torch.embedding 이 0부터 시작이라는 것을 몰랐다... 
-    optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+    optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=0.9)
 
     if len(args.load_dir)>1:
         checkpoint=torch.load(args.load_dir,map_location=device)
@@ -100,7 +100,7 @@ if __name__=="__main__":
         start_epoch=checkpoint['epoch']+1
         model.load_state_dict(checkpoint['state_dict'])
         model.to(device)
-        optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+        optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=0.9)
         optimizer.load_state_dict(checkpoint['optimizer'])
     else:
         start_epoch=0
