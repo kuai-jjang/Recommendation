@@ -103,6 +103,7 @@ if __name__=="__main__":
         optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=0.9)
         optimizer.load_state_dict(checkpoint['optimizer'])
     else:
+        model.to(device)
         start_epoch=0
 
 
