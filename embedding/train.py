@@ -99,12 +99,13 @@ if __name__=="__main__":
         print(checkpoint)
         start_epoch=checkpoint['epoch']+1
         model.load_state_dict(checkpoint['state_dict'])
+        model.to(device)
+        optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
         optimizer.load_state_dict(checkpoint['optimizer'])
     else:
         start_epoch=0
 
 
-    model.to(device)
     criterion=nn.CrossEntropyLoss()
     epochs=start_epoch+args.epoch
     
