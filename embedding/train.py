@@ -95,10 +95,10 @@ if __name__=="__main__":
     optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
 
     if len(args.load_dir)>1:
-        checkpoint=torch.load(args.load_dir)
+        checkpoint=torch.load(args.load_dir,map_location=device)
         print(checkpoint)
         start_epoch=checkpoint['epoch']+1
-        model.load_state_dict(checkpoint['state_dict'], map_location=device)
+        model.load_state_dict(checkpoint['state_dict'])
         optimizer.load_state_dict(checkpoint['optimizer'])
     else:
         start_epoch=0
