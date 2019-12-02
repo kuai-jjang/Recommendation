@@ -19,7 +19,7 @@ class word2vec(nn.Module):
 
     def forward(self,x):
         
-        print(self.embedding.weight.is_cuda)
+        x=x.cuda() if self.embedding.weight.is_cuda else x
         embedds=self.embedding(x).cuda() if self.embedding.weight.is_cuda else self.embedding(x)
         
         output=F.relu(self.encoding_layer(embedds))
