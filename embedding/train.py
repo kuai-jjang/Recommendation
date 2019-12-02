@@ -12,7 +12,6 @@ import numpy as np
 import argparse
 import pickle
 
-##TODO genius0142
 
 
 class skipgram:

@@ -13,7 +13,7 @@ class word2vec(nn.Module):
         self.dim=dim
         self.vocab_len=vocab_len
         self.embedding=nn.Embedding(self.vocab_len,self.dim)
-        self.encoding_layer=nn.Linear(self.dim,128)
+        #self.encoding_layer=nn.Linear(self.dim,128)
         #self.decoding_layer=nn.Linear(128,self.vocab_len)
 
 
@@ -22,15 +22,15 @@ class word2vec(nn.Module):
         x=x.cuda() if self.embedding.weight.is_cuda else x
         embedds=self.embedding(x).cuda() if self.embedding.weight.is_cuda else self.embedding(x)
         
-        output=F.relu(self.encoding_layer(embedds))
+        #output=F.relu(self.encoding_layer(embedds))
         #output=self.decoding_layer(output)
         
-        return output
+        return embedds
     
     
 class negative_sampling(nn.Module):
 
-    def __init__(self,model,vocab_len,enc_dim=128,n=5):
+    def __init__(self,model,vocab_len,enc_dim=256,n=5):
         super(negative_sampling, self).__init__()
 
 
