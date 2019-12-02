@@ -147,13 +147,15 @@ if __name__=="__main__":
                     previous_running_loss=running_loss
                     es=0
 
-                if es==early_stopping:
-                    done=1
-                    epochs=epoch
-                    break
-
                 es+=1  
                 running_loss=0
+
+            if es==early_stopping:
+                done=1
+                epochs=epoch
+                break
+
+
         if done:
             break
 
