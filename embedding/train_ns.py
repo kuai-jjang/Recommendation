@@ -140,7 +140,8 @@ if __name__=="__main__":
 
             running_loss+=loss.item()
             if (i+1) % 500 == 0:    # print every 2000 mini-batches
-                print('[%d, %5d] loss: %.5f' %(epoch + 1, i + 1, running_loss / 499))
+                running_loss=running_loss/500
+                print('[%d, %5d] loss: %.5f' %(epoch + 1, i + 1, running_loss))
 
                 if abs(running_loss)<abs(previous_running_loss):
                     previous_running_loss=running_loss
