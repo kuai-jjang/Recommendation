@@ -122,6 +122,7 @@ if __name__=="__main__":
 
 
     for epoch in range(start_epoch,epochs+1):
+        
 
         for i,data in enumerate(my_dataloader,0):
             
@@ -155,7 +156,7 @@ if __name__=="__main__":
                 epochs=epoch
                 break
 
-
+        running_loss=0
         if done:
             break
 
