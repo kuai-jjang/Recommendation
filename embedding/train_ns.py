@@ -162,6 +162,6 @@ if __name__=="__main__":
             
 
     state={'epoch':epochs,'state_dict':model.state_dict(),'optimizer':optimizer.state_dict()}
-    torch.save(state,args.save_dir+'_epoch_'+str(epochs)+'_lr_'+str(args.lr))
+    torch.save(state,args.save_dir+'_epoch_'+str(epochs))
 
 
