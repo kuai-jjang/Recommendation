@@ -116,6 +116,9 @@ if __name__=="__main__":
     early_stopping=args.early_stopping
     es=0
 
+    running_loss=99
+    previous_running_loss=100
+
     for epoch in range(start_epoch,epochs+1):
         
         
@@ -128,6 +131,7 @@ if __name__=="__main__":
             break
 
         running_loss=0.0
+
         for i,data in enumerate(my_dataloader,0):
             inputs,labels=data
             labels=labels.view(1,-1)[0].to(device)
