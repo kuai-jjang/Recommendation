@@ -57,7 +57,7 @@ class negative_sampling(nn.Module):
 
 
         o_loss=torch.bmm(i_vec,o_vec).sigmoid().log().neg()
-        n_loss=torch.bmm(i_vec,n_vec).sigmoid().log().mean()
+        n_loss=torch.bmm(i_vec,n_vec).sigmoid().log().mean().neg()
 
 
         loss=o_loss+n_loss
