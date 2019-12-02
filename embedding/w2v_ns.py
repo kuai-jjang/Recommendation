@@ -19,7 +19,8 @@ class word2vec(nn.Module):
 
     def forward(self,x):
 
-        embedds=self.embedding(x)
+        embedds=self.embedding(x).cuda() if self.embedding.weight.is_cuda else self.embedding(x)
+        print(self.embedding.weight.is_cuda)
         output=F.relu(self.encoding_layer(embedds))
         #output=self.decoding_layer(output)
         
@@ -45,7 +46,7 @@ class negative_sampling(nn.Module):
 
         nwords = torch.FloatTensor(batch_size, self.n).uniform_(1, self.vocab_len).long()   
 
-        n_vec=self.model.forward(nwords).neg().view(batch_size,-1,self.n).neg()
+        n_vec=self.model.forward(nwords).neg().view(batch_size,-1,self.n)
         i_vec=self.model.forward(x).view(batch_size,1,-1)
         o_vec=self.model.forward(y).view(batch_size,-1,1)
 
