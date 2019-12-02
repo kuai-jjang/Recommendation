@@ -30,7 +30,7 @@ class word2vec(nn.Module):
     
 class negative_sampling(nn.Module):
 
-    def __init__(self,model,vocab_len,enc_dim=128,n=10):
+    def __init__(self,model,vocab_len,enc_dim=128,n=5):
         super(negative_sampling, self).__init__()
 
 

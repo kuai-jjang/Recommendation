@@ -51,7 +51,7 @@ if __name__=="__main__":
     parser.add_argument('--vocabfreq_dir',default="./preprocessing/my_vocab_frequency", help='vocab?',type=str)
     parser.add_argument('--make_skipgram',default=False, help='make skipgram?',type=bool)
     parser.add_argument('--skipgram_dataset',default='./skip_datasets_witoud_josa.pickle', help='skipgram dataset?',type=str)
-    parser.add_argument('--save_dir',default='./w2v_withoud_ns', help='savde directory?',type=str)
+    parser.add_argument('--save_dir',default='./w2v_with_ns', help='savde directory?',type=str)
     parser.add_argument('--load_dir',default='.', help='load directory?',type=str)
     
     parser.add_argument('--epoch',default=3, help='epoch?',type=int)
