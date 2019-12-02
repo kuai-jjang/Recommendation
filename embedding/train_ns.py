@@ -139,7 +139,7 @@ if __name__=="__main__":
             optimizer.step()
 
             running_loss+=loss.item()
-            if i % 499 == 0:    # print every 2000 mini-batches
+            if (i+1) % 500 == 0:    # print every 2000 mini-batches
                 print('[%d, %5d] loss: %.5f' %(epoch + 1, i + 1, running_loss / 499))
 
                 if abs(running_loss)<abs(previous_running_loss):
@@ -150,7 +150,7 @@ if __name__=="__main__":
                     done=1
                     epochs=epoch
                     break
-                
+
                 es+=1  
                 running_loss=0
         if done:
