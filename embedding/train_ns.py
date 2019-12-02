@@ -115,24 +115,16 @@ if __name__=="__main__":
     epochs=start_epoch+args.epoch
     early_stopping=args.early_stopping
     es=0
+    done=0
 
     running_loss=99
     previous_running_loss=100
 
+
     for epoch in range(start_epoch,epochs+1):
-        
-        
-
-        if abs(running_loss)<abs(previous_running_loss):
-            previous_running_loss=running_loss
-            es=0
-        if es==early_stopping:
-            epochs=epoch
-            break
-
-        running_loss=0.0
 
         for i,data in enumerate(my_dataloader,0):
+            
             inputs,labels=data
             labels=labels.view(1,-1)[0].to(device)
             inputs=inputs.to(device)
@@ -149,8 +141,22 @@ if __name__=="__main__":
             running_loss+=loss.item()
             if i % 499 == 0:    # print every 2000 mini-batches
                 print('[%d, %5d] loss: %.5f' %(epoch + 1, i + 1, running_loss / 499))
+
+                if abs(running_loss)<abs(previous_running_loss):
+                    previous_running_loss=running_loss
+                    es=0
+
+                if es==early_stopping:
+                    done=1
+                    epochs=epoch
+                    break
+                
+                es+=1  
+                running_loss=0
+        if done:
+            break
+
             
-        es+=1
 
     state={'epoch':epochs,'state_dict':model.state_dict(),'optimizer':optimizer.state_dict()}
     torch.save(state,args.save_dir+'_epoch_'+str(epochs)+'_lr_'+str(args.lr))
