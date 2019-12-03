@@ -18,6 +18,7 @@ class word2vec(nn.Module):
 
 
     def forward(self,x):
+
         embedds=self.embedding(x)
         output=F.relu(self.encoding_layer(embedds))
         output=self.decoding_layer(output)
@@ -27,41 +28,33 @@ class word2vec(nn.Module):
         return output
     
     
-def negative_sampling(y_true,y_pred,vocab_len,n=10):
- 
+class negative_sampling(nn.Module):
 
-    for i in range(y_pred.size()[0]):
-        if i==0:
-            a=np.random.choice(np.arange(1,vocab_len+1),size=n,replace=False).reshape(1,-1)
-        else:
-            a=np.vstack((a,np.random.choice(np.arange(1,vocab_len+1),size=n,replace=False)))
-   
+    def __init__(self,model,vocab_len,n=10):
+        super(negative_sampling, self).__init__()
 
-    for idx,label in enumerate(y_true):
-        if label.item() not in a[idx]:
-            a[idx][0]=label
-            
-        y_is=torch.tensor([y_pred[idx][j-1] for j in a[idx]]).unsqueeze(0)
-        y_is_true=np.where(a[idx]==label.item())[0]+1
-        
-        if idx==0:
-            y_pred_batch=y_is
-            y_true_batch=np.array(y_is_true)
-        else:
-            y_pred_batch=torch.cat([y_pred_batch,y_is])
-            y_true_batch=np.hstack((y_true_batch,y_is_true)) 
-        
-    y_pred_batch=Variable(y_pred_batch,requires_grad=True)
-    y_true_batch=torch.tensor(y_true_batch)
+
+        self.model=model['embedding.weight'].detach()
+        self.vocab_len=vocab_len
+        self.n=n
+
+
+    def forward(self,y_true,y_pred):
+
+
+        batch_size = y_true.size()[0]
+
+
+    #    ivectors = self.embedding.forward_i(iword).unsqueeze(2)
+
+        nwords = torch.FloatTensor(batch_size, self.n).uniform_(1, self.vocab_size).long()   
+
+        n_vec=model[nwords].neg()
+        i_vec=
+
+
+
+
     
-    criterion = nn.CrossEntropyLoss()
-    
-#     print(y_pred_batch)
-#     print(y_true_batch)
-    
-    return criterion(y_pred_batch,y_true_batch)
-    
-    
-    
-    
-    
+
+

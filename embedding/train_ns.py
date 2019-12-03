@@ -47,10 +47,13 @@ class skipgram:
 if __name__=="__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--vocab_dir',default="./preprocessing/without_josa_etc", help='vocab?',type=str)
-    parser.add_argument('--vocabfreq_dir',default="./preprocessing/my_vocab_frequency", help='vocab?',type=str)
+    parser.add_argument('--vocab_dir',default="./preprocessing/without_josa_etc", help='vocab dir?',type=str)
+    parser.add_argument('--vocabfreq_dir',default="./preprocessing/my_vocab_frequency", help='vocabfreq dir?',type=str)
+    parser.add_argument('--seqidx_dir',default="./preprocessing/seq_without_josa_gut_su.txt", help='seqidx dir?',type=str)
+    
+
     parser.add_argument('--make_skipgram',default=False, help='make skipgram?',type=bool)
-    parser.add_argument('--skipgram_dataset',default='./skip_datasets_witoud_josa.pickle', help='skipgram dataset?',type=str)
+    parser.add_argument('--skipgram_dataset',default='./skip_datasets_witoud_josa_gut_su.pickle', help='skipgram dataset?',type=str)
     parser.add_argument('--save_dir',default='./w2v_with_ns', help='savde directory?',type=str)
     parser.add_argument('--load_dir',default='.', help='load directory?',type=str)
     
@@ -75,9 +78,10 @@ if __name__=="__main__":
 
     #skipgram dataset 만들기 -> pickle로 저장해두는게 편할듯?
     if args.make_skipgram:  
-        X,y=skipgram('./preprocessing/seq_without_josa_etc.txt',window_size).reading()
-        with open('./skip_datasets_witoud_josa.pickle','wb') as f :
+        X,y=skipgram(args.seqidx_dir,window_size).reading()
+        with open(args.skipgram_dataset,'wb') as f :
             pickle.dump([X,y],f)
+            print('save 완료')
     #skipgram dataset 불러오기
     with open(args.skipgram_dataset,'rb') as f :
         skip_gram_set=pickle.load(f)

@@ -9,22 +9,23 @@ class doc2vec(nn.Module):
         
         self.lecture_len=lecture_len
         self.lecuter_dim=lecture_dim
-        # lecture matrix
         self.lecture = nn.Embedding(lecture_len,lecture_dim)
-        # word matrix
-        # output layer parameters
-        self.word_emb=model
-        self._O = nn.Parameter(torch.FloatTensor(lecture_dim, num_words).zero_(), requires_grad=True)
-
-    def forward(self, context_ids, doc_ids, target_noise_ids):
+        self.word_emb=model.detach()
 
 
-        x = torch.add(
-            self.lecture[doc_ids], torch.sum(self.word_emb[context_ids], dim=1))
+    def forward(self, inputs, target):
 
-        return torch.bmm(
-            x.unsqueeze(1),
-            self._O[:, target_noise_ids].permute(1, 0, 2)).squeeze()
 
-    def get_paragraph_vector(self, index):
-        return self._D[index, :].data.tolist()
+
+        doc_id=torch.LongTensor(inputs[:,0].unsqueeze(1))
+        context=inputs[:,1:]
+
+        lec_vec=self.lecture(doc_id)
+        word_vec=self.word_emb[context]
+        target_vec=self.word_emb[target].unsqueeze(1)
+
+        d_vec=torch.cat((lec_vec,word_vec),1).mean(1).unsqueeze(1)
+        i_loss=torch.bmm(d_vec,target_vec.permute(0,2,1))
+
+        print(i_loss)
+        print(i_loss.shape)
