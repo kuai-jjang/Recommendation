@@ -58,8 +58,8 @@ if __name__ == '__main__':
     parser.add_argument('--making_vocab',default=True, help='make vocab?',type=bool)
     parser.add_argument('--make_seq',default=True, help='make seq?',type=bool)
     
-    parser.add_argument('--vocab_name',default='./without_josa_etc', help='vocab_name?',type=str)
-    parser.add_argument('--seq_name',default='./seq_without_josa_etc', help='seq_name?',type=str)
+    parser.add_argument('--vocab_name',default='./vocab_withou_josa_gut_su.pickle', help='vocab_name?',type=str)
+    parser.add_argument('--seq_name',default='./seq_without_josa_gut_su.pickle', help='seq_name?',type=str)
     
 
     args = parser.parse_args()
@@ -108,6 +108,7 @@ if __name__ == '__main__':
                 print(step,'/',length_sent)
             tokenized=tokenizer.pos(i)
             tokenized=list(filter(lambda x:x[1] not in ['Josa','Suffix','Foreign','Punctuation'],tokenized))
+            tokenized=list(filter(lambda x:x[0] not in ['것','수'],tokenized))
             seq=list(map(lambda x:w2i_default[x],tokenized))
             with open(args.seq_name+'.txt', 'a') as f:
                 for item in seq:
