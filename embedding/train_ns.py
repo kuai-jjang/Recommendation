@@ -47,8 +47,8 @@ class skipgram:
 if __name__=="__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--vocab_dir',default="./preprocessing/without_josa_etc", help='vocab dir?',type=str)
-    parser.add_argument('--vocabfreq_dir',default="./preprocessing/my_vocab_frequency", help='vocabfreq dir?',type=str)
+    parser.add_argument('--vocab_dir',default="./preprocessing/vocab_without_josa_gut_su.pickle", help='vocab dir?',type=str)
+    parser.add_argument('--vocabfreq_dir',default="./preprocessing/multi_freq.pickle", help='vocabfreq dir?',type=str)
     parser.add_argument('--seqidx_dir',default="./preprocessing/seq_without_josa_gut_su.txt", help='seqidx dir?',type=str)
     
 
@@ -61,8 +61,6 @@ if __name__=="__main__":
     parser.add_argument('--lr',default=0.0001, help='lr?',type=float)
     parser.add_argument('--early_stopping',default=10, help='early_stopping?',type=int)
 
-
-    
     args = parser.parse_args()
 
     window_size=2
@@ -73,7 +71,7 @@ if __name__=="__main__":
 
     #빈도수 사전 불러오기
     with open(args.vocabfreq_dir,'rb') as f: #defaultdict으로 바꿔야됨
-        freq_dic=pickle.load(f)
+        multi_freq=pickle.load(f)
 
 
     #skipgram dataset 만들기 -> pickle로 저장해두는게 편할듯?
@@ -97,7 +95,7 @@ if __name__=="__main__":
     my_dataloader = DataLoader(my_dataset,batch_size=batchsize,shuffle = True,drop_last=True) #create your dataloader
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    model=w2v_ns.word2vec(vocab_len=len(w2i)+2) #unk이랑 torch.embedding 이 0부터 시작이라는 것을 몰랐다... 
+    model=w2v_ns.word2vec(vocab_len=len(w2i)+1) #unk 때문에 1 더해줌
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=0.9)
 
     if len(args.load_dir)>1:
@@ -115,7 +113,7 @@ if __name__=="__main__":
 
     # criterion=nn.CrossEntropyLoss()
 
-    criterion=w2v_ns.negative_sampling(model=model,vocab_len=len(w2i)+1)
+    criterion=w2v_ns.negative_sampling(model=model,vocab_len=len(w2i)+1,freq_dic=multi_freq)
     epochs=start_epoch+args.epoch
     early_stopping=args.early_stopping
     es=0

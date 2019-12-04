@@ -30,13 +30,14 @@ class word2vec(nn.Module):
     
 class negative_sampling(nn.Module):
 
-    def __init__(self,model,vocab_len,enc_dim=256,n=5):
+    def __init__(self,model,vocab_len,freq_dic,enc_dim=256,n=5):
         super(negative_sampling, self).__init__()
 
 
         self.model=model
         self.vocab_len=vocab_len
         self.enc_dim=enc_dim
+        self.freq_dic=torch.tensor(list(freq_dic.values()))
         self.n=n
 
 
@@ -46,7 +47,10 @@ class negative_sampling(nn.Module):
         batch_size = y.size()[0]
 
         nwords = torch.FloatTensor(batch_size, self.n).uniform_(1, self.vocab_len).long()   
-
+        # print(self.vocab_len)
+        # print(len(freq_dic))
+        # nwords=torch.multinomial(self.freq_dic,batch_size*self.n).view(batch_size,self.n)  #frequency dict 다시 만들어야됨, 일반 vocab보다 사이즈가 크다 (1인 것도 들어감)
+        # print(nwords)
         n_vec=self.model.forward(nwords).neg().view(batch_size,-1,self.n)
         i_vec=self.model.forward(x).view(batch_size,1,-1)
         o_vec=self.model.forward(y).view(batch_size,-1,1)

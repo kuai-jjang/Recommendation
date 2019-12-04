@@ -87,6 +87,8 @@ if __name__ == '__main__':
         with open(args.vocab_name,'wb') as handle:  #빈도수랑 사전만드는 분리하고 싶다
             pickle.dump(my_vocab,handle)
         with open(args.vocab_name[:-7]+'_freq.pickle','wb') as handle:  #빈도수랑 사전만드는 분리하고 싶다
+            total=sum(freq.values())
+            freq.update((x, y/total) for x, y in freq.items())
             pickle.dump(freq,handle)
 
     #사전 불러오기
