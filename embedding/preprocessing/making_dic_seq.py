@@ -110,7 +110,7 @@ if __name__ == '__main__':
                 print(step,'/',length_sent)
             tokenized=tokenizer.pos(i)
             tokenized=list(filter(lambda x:x[1] not in ['Josa','Suffix','Foreign','Punctuation'],tokenized))
-            tokenized=list(filter(lambda x:x[0] not in [('것','Noun'),('수','Noun')],tokenized))
+            tokenized=list(filter(lambda x:x[0] not in ['것','수'],tokenized))
             seq=list(map(lambda x:w2i_default[x],tokenized))
             with open(args.seq_name+'.txt', 'a') as f:
                 for item in seq:
