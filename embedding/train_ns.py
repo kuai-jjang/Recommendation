@@ -53,7 +53,7 @@ if __name__=="__main__":
     
 
     parser.add_argument('--make_skipgram',default=False, help='make skipgram?',type=bool)
-    parser.add_argument('--skipgram_dataset',default='./skip_datasets_witoud_josa_gut_su.pickle', help='skipgram dataset?',type=str)
+    parser.add_argument('--skipgram_dataset',default='./skip_datasets_witout_josa_gut_su.pickle', help='skipgram dataset?',type=str)
     parser.add_argument('--save_dir',default='./w2v_with_ns', help='savde directory?',type=str)
     parser.add_argument('--load_dir',default='.', help='load directory?',type=str)
     
@@ -113,6 +113,8 @@ if __name__=="__main__":
 
     # criterion=nn.CrossEntropyLoss()
 
+    print('len(w2i):' ,len(w2i))
+
     criterion=w2v_ns.negative_sampling(model=model,vocab_len=len(w2i)+1,freq_dic=multi_freq)
     epochs=start_epoch+args.epoch
     early_stopping=args.early_stopping
@@ -163,7 +165,7 @@ if __name__=="__main__":
             break
 
             
-
+    # 모델 저장
     state={'epoch':epochs,'state_dict':model.state_dict(),'optimizer':optimizer.state_dict()}
     torch.save(state,args.save_dir+'_epoch_'+str(epochs))
 

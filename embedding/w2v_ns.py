@@ -26,6 +26,10 @@ class word2vec(nn.Module):
         #output=self.decoding_layer(output)
         
         return embedds
+
+'''
+TODO : CBOW 모델 구현
+'''
     
     
 class negative_sampling(nn.Module):
@@ -37,7 +41,7 @@ class negative_sampling(nn.Module):
         self.model=model
         self.vocab_len=vocab_len
         self.enc_dim=enc_dim
-        self.freq_dic=torch.tensor(list(freq_dic.values()))
+        self.freq_dic=torch.tensor(freq_dic)
         self.n=n
 
 
@@ -46,13 +50,14 @@ class negative_sampling(nn.Module):
 
         batch_size = y.size()[0]
 
-        nwords = torch.FloatTensor(batch_size, self.n).uniform_(1, self.vocab_len).long()   
-        # print(self.vocab_len)
-        # print(len(freq_dic))
-        # nwords=torch.multinomial(self.freq_dic,batch_size*self.n).view(batch_size,self.n)  #frequency dict 다시 만들어야됨, 일반 vocab보다 사이즈가 크다 (1인 것도 들어감)
-        # print(nwords)
+       # nwords = torch.FloatTensor(batch_size, self.n).uniform_(1, self.vocab_len).long()   
+
+        nwords=torch.multinomial(self.freq_dic,batch_size*self.n).view(batch_size,self.n)  
+
         n_vec=self.model.forward(nwords).neg().view(batch_size,-1,self.n)
+        print(x)
         i_vec=self.model.forward(x).view(batch_size,1,-1)
+        print(y)
         o_vec=self.model.forward(y).view(batch_size,-1,1)
 
         # print(n_vec.shape)

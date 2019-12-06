@@ -89,7 +89,11 @@ if __name__ == '__main__':
         with open(args.vocab_name[:-7]+'_freq.pickle','wb') as handle:  #빈도수랑 사전만드는 분리하고 싶다
             total=sum(freq.values())
             freq.update((x, y/total) for x, y in freq.items())
-            pickle.dump(freq,handle)
+        multi_prob=np.array([])
+        for i in my_vocab.keys():
+            multi_prob=np.append(multi_prob,freq[i])
+        with open('./multi_freq.pickle','wb') as f:
+            pickle.dump(multi_prob,f)
 
     #사전 불러오기
     if args.make_seq:
@@ -99,7 +103,8 @@ if __name__ == '__main__':
         ####여기서부터 seq_idx 만들기
         vocab_size=len(w2i)
         print(vocab_size)
-        w2i_default=defaultdict(lambda:vocab_size+1,w2i)
+        w2i_default=defaultdict(lambda:vocab_size,w2i)  #'unk ' : vocab size
+    
         #default dict 값이 unk
         #w2i['unk']=len(w2i)+1
         # make_seq=making_seq(Okt())
