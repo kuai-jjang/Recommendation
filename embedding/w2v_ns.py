@@ -55,15 +55,8 @@ class negative_sampling(nn.Module):
         nwords=torch.multinomial(self.freq_dic,batch_size*self.n).view(batch_size,self.n)  
 
         n_vec=self.model.forward(nwords).neg().view(batch_size,-1,self.n)
-        print(x)
         i_vec=self.model.forward(x).view(batch_size,1,-1)
-        print(y)
         o_vec=self.model.forward(y).view(batch_size,-1,1)
-
-        # print(n_vec.shape)
-        # print(i_vec.shape)
-        # print(o_vec.shape)
-
 
         o_loss=torch.bmm(i_vec,o_vec).sigmoid().log().neg()
         n_loss=torch.bmm(i_vec,n_vec).sigmoid().log().mean().neg()
