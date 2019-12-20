@@ -47,13 +47,13 @@ class skipgram:
 if __name__=="__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--vocab_dir',default="./preprocessing/vocab_without_josa_gut_su.pickle", help='vocab dir?',type=str)
-    parser.add_argument('--vocabfreq_dir',default="./preprocessing/multi_freq.pickle", help='vocabfreq dir?',type=str)
-    parser.add_argument('--seqidx_dir',default="./preprocessing/seq_without_josa_gut_su.txt", help='seqidx dir?',type=str)
+    parser.add_argument('--vocab_dir',default="./preprocessing/vocab_mecab.pickle", help='vocab dir?',type=str)
+    parser.add_argument('--vocabfreq_dir',default="./preprocessing/vocab_mecab_multi_freq.pickle", help='vocabfreq dir?',type=str)
+    parser.add_argument('--seqidx_dir',default="./preprocessing/seq_mecab_2.txt", help='seqidx dir?',type=str)
     
 
     parser.add_argument('--make_skipgram',default=False, help='make skipgram?',type=bool)
-    parser.add_argument('--skipgram_dataset',default='./skipgram_dataset/2017_1_skipgram.pickle', help='skipgram dataset?',type=str)
+    parser.add_argument('--skipgram_dataset',default='./skipgram_dataset/2017_2_skipgram.pickle', help='skipgram dataset?',type=str)
     parser.add_argument('--save_dir',default='./w2v_with_ns', help='savde directory?',type=str)
     parser.add_argument('--load_dir',default='.', help='load directory?',type=str)
     

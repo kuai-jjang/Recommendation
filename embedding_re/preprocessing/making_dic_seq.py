@@ -9,15 +9,20 @@ from konlpy.tag import Okt
 import pickle
 from compare_pos_tag import sampling_by_length,preprocessing
 from collections import defaultdict
+from eunjeon import Mecab
+
+
+
 
 class making_dict:
-    def __init__(self,tokenizer,sentences,freq,n=2):
+    def __init__(self,tokenizer,sentences,freq,remove_pos,n=2):
         self.tokenizer=tokenizer
         self.sentences=sentences
         self.vocab=my_vocab
         self.len_sent=len(sentences)
         self.step=0  #진행상황
         self.freq={}
+        self.remove_pos=remove_pos
         self.n=n
 
     def make_vocab(self):
@@ -31,7 +36,7 @@ class making_dict:
         self.tokens=self.tokenizer.pos(x)
         
         for i in self.tokens:
-            if i[1] not in ['Josa','Suffix','Foreign','Punctuation']:
+            if i[1][0] not in self.remove_pos and i[1] not in self.remove_pos:
                 if i[0] not in ['것','수']:
                     self.update_dict(i)
             
@@ -56,14 +61,14 @@ class making_dict:
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--data_dir',default=r'C:\tensor_code\kluebot\data\raw\2017_1.csv', help='datafile',type=str)
-    parser.add_argument('--make_vocab',default=False, help='make vocab?',type=bool)
-    parser.add_argument('--make_seq',default=False, help='make seq?',type=bool)
+    parser.add_argument('--data_dir',default=r'C:\tensor_code\kluebot\data\raw\2017_2.csv', help='datafile',type=str)
+    parser.add_argument('--make_vocab',default=True, help='make vocab?',type=bool)
+    parser.add_argument('--make_seq',default=True, help='make seq?',type=bool)
 
     parser.add_argument('--online',default=False, help='update vocab?',type=bool)
     
-    parser.add_argument('--vocab_name',default='./vocab_without_josa_gut_su.pickle', help='vocab_name?',type=str)
-    parser.add_argument('--seq_name',default='./seq_without_josa_gut_su', help='seq_name?',type=str)
+    parser.add_argument('--vocab_name',default='./vocab_mecab.pickle', help='vocab_name?',type=str)
+    parser.add_argument('--seq_name',default='./seq_mecab_2', help='seq_name?',type=str)
     
 
     args = parser.parse_args()
@@ -77,10 +82,13 @@ if __name__ == '__main__':
     sample_sentence=list(map(lambda x:k.sub('',x),lecture_sentences))
     sample_sentence=list(map(lambda x:re.sub('\n','',x),sample_sentence))
 
-    tokenizer=Okt()
+    #tokenizer=Okt()
+    tokenizer=Mecab()
 
     my_vocab={}
     freq={}
+    remove_pos=['J','E','X','SF','SE','SSO','SSC','SC','SY']   #okt : ['Josa','Suffix','Foreign','Punctuation']
+
 
 
 
@@ -94,7 +102,7 @@ if __name__ == '__main__':
     #사전 만들기
     if args.make_vocab:
 
-        trial=making_dict(tokenizer,sample_sentence,my_vocab)
+        trial=making_dict(tokenizer,sample_sentence,my_vocab,remove_pos)
         trial.make_vocab()
         #사전 저장
         with open(args.vocab_name,'wb') as handle:  #빈도수랑 사전만드는 분리하고 싶다
@@ -106,7 +114,7 @@ if __name__ == '__main__':
         multi_prob=np.array([])
         for i in my_vocab.keys():
             multi_prob=np.append(multi_prob,freq[i])
-        with open('./multi_freq.pickle','wb') as f:
+        with open(args.vocab_name[:-7]+'_multi_freq.pickle','wb') as f:
             pickle.dump(multi_prob,f)
 
     #사전 불러오기
@@ -130,7 +138,7 @@ if __name__ == '__main__':
             if step%1000==0:
                 print(step,'/',length_sent)
             tokenized=tokenizer.pos(i)
-            tokenized=list(filter(lambda x:x[1] not in ['Josa','Suffix','Foreign','Punctuation'],tokenized))
+            tokenized=list(filter(lambda x:x[1][0] not in remove_pos and x[1] not in remove_pos,tokenized))
             tokenized=list(filter(lambda x:x[0] not in ['것','수'],tokenized))
             seq=list(map(lambda x:w2i_default[x],tokenized))
             with open(args.seq_name+'.txt', 'a') as f:
