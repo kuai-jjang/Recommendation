@@ -18,6 +18,6 @@ python apply_tfidf.py --dir C:\\tensor_code\\kluebot\\data\\prep\\2017_1_1 --cla
 ```  
 
 ## tf-idf 시각화
-![art](img src="../../embedding/output/tf_idf_doc.png" width="100")
+<img src="../../embedding/output/tf_idf_doc.png" width="100">
 
 
