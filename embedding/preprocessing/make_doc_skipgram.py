@@ -5,7 +5,9 @@ from compare_pos_tag import sampling_by_length,preprocessing
 from konlpy.tag import Okt
 import ast
 import pickle
+import argparse
 from collections import defaultdict
+from eunjeon import Mecab
 
 
 
@@ -81,7 +83,6 @@ def pre_re(y):
 
 
 if __name__=='__main__':
-    print('hi')
 
     my_data=pd.read_csv(r'C:\tensor_code\kluebot\data\raw\2017_1.csv')
     lecture_sentences=preprocessing(my_data.LectureEval.values)

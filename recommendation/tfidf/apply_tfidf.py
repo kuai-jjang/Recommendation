@@ -5,6 +5,8 @@ import ast
 import collections
 import copy
 import random
+import argparse
+
 
 class prepro:
 
@@ -68,29 +70,31 @@ class recommend:
     def cossim(self,x,y):
         return 1/(((x*y).sum()/(x**2).sum()**0.5/(y**2).sum()**0.5))
 
-komoran = Komoran() 
-print(komoran.morphs(u'졸린데 수업 끝내주세요'))
-print(komoran.nouns(u'모기 물렸다'))
+if __name__=="__main__":
 
-df=pd.read_csv(r"C:\tensor_code\kluebot\data\prep\2017_1_pre")
-df_art=df[df.Classification=='교양']
+    komoran = Komoran() 
+    print(komoran.morphs(u'졸린데 수업 끝내주세요'))
+    print(komoran.nouns(u'모기 물렸다'))
 
-#이 부분 바꿔야됨
-df_new=df_art['keyword_sent'].apply(lambda x:prepro().documentize(x))   
-df_extract=pd.concat([df_art['className'],df_new],axis=1).dropna().reset_index(drop=True)
+    df=pd.read_csv(r"C:\tensor_code\kluebot\data\prep\2017_1_pre")
+    df_art=df[df.Classification=='교양']
 
-
-tfidf,vocab=tf_idf(df_extract['keyword_sent']).cal_tf()
-print(len(vocab))
-
-lec_vec=dict(zip(df_extract['className'],tfidf))
+    #이 부분 바꿔야됨
+    df_new=df_art['keyword_sent'].apply(lambda x:prepro().documentize(x))   
+    df_extract=pd.concat([df_art['className'],df_new],axis=1).dropna().reset_index(drop=True)
 
 
+    tfidf,vocab=tf_idf(df_extract['keyword_sent']).cal_tf()
+    print(len(vocab))
 
-x=df_extract.className.iloc[random.randint(1,df_extract.shape[0])]
+    lec_vec=dict(zip(df_extract['className'],tfidf))
 
 
-print(x,'와 과제 관련 가장 가까운 강의들: ')
-print("l2: ",recommend(x,5,'l2_dis').getit())
-#print('\n')
-#print("코사인유사도:" ,recommend(x,5,cossim))
+
+    x=df_extract.className.iloc[random.randint(1,df_extract.shape[0])]
+
+
+    print(x,'와 과제 관련 가장 가까운 강의들: ')
+    print("l2: ",recommend(x,5,'l2_dis').getit())
+    #print('\n')
+    #print("코사인유사도:" ,recommend(x,5,cossim))

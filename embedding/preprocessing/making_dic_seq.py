@@ -7,7 +7,6 @@ import argparse
 
 from konlpy.tag import Okt
 import pickle
-from compare_pos_tag import sampling_by_length,preprocessing
 from collections import defaultdict
 
 class making_dict:
@@ -51,7 +50,11 @@ class making_dict:
         if freq[token]==self.n:
             self.vocab[token]=len(self.vocab)
  
-
+def preprocessing(data):
+    lecture_sentences=list(map(lambda x:ast.literal_eval(x),data))
+    lecture_sentences=list(filter(lambda x:(len(x)!=0 and len(x)!=1),lecture_sentences)) #강의평이 없가나 1개 밖에 없는 경우 날림
+    lecture_sentences=[i for e in lecture_sentences for i in e]
+    return lecture_sentences
 
 if __name__ == '__main__':
 
@@ -74,7 +77,8 @@ if __name__ == '__main__':
     k=re.compile('[ㄱ-ㅎ]+|')
     sample_sentence=list(map(lambda x:k.sub('',x),lecture_sentences))
     sample_sentence=list(map(lambda x:re.sub('\n','',x),sample_sentence))
-
+    print(sample_sentence)
+    raise EnvironmentError
     tokenizer=Okt()
 
     #사전 만들기

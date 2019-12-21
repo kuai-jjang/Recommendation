@@ -56,19 +56,23 @@ class making_dict:
         if freq[token]==self.n:
             self.vocab[token]=len(self.vocab)
  
-
+def preprocessing(data):
+    lecture_sentences=list(map(lambda x:ast.literal_eval(x),data))
+    lecture_sentences=list(filter(lambda x:(len(x)!=0 and len(x)!=1),lecture_sentences)) #강의평이 없가나 1개 밖에 없는 경우 날림
+    lecture_sentences=[i for e in lecture_sentences for i in e]
+    return lecture_sentences
 
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--data_dir',default=r'C:\tensor_code\kluebot\data\raw\2017_2.csv', help='datafile',type=str)
+    parser.add_argument('--data_dir',default=r'C:\tensor_code\kluebot\data\raw\2018_2.csv', help='datafile',type=str)
     parser.add_argument('--make_vocab',default=True, help='make vocab?',type=bool)
     parser.add_argument('--make_seq',default=True, help='make seq?',type=bool)
 
-    parser.add_argument('--online',default=False, help='update vocab?',type=bool)
+    parser.add_argument('--online',default=True, help='update vocab?',type=bool)
     
     parser.add_argument('--vocab_name',default='./vocab_mecab.pickle', help='vocab_name?',type=str)
-    parser.add_argument('--seq_name',default='./seq_mecab_2', help='seq_name?',type=str)
+    parser.add_argument('--seq_name',default='./seq_mecab_2018_2', help='seq_name?',type=str)
     
 
     args = parser.parse_args()
