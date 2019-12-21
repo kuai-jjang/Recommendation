@@ -15,6 +15,9 @@ keyword 1: '' 2:'과제' 3:'출석' 4:'선수'
 
 python apply_tfidf.py --dir C:\\tensor_code\\kluebot\\data\\prep\\2017_1_1 --classtype 교양
 
-```
+```  
+
+## tf-idf 시각화
+![교양](..\..\Recommendation_System\embedding\output\tf_idf_doc)
 
 

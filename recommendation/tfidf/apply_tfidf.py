@@ -6,6 +6,7 @@ import collections
 import copy
 import random
 import argparse
+import pickle
 
 
 class prepro:
@@ -72,15 +73,27 @@ class recommend:
 
 if __name__=="__main__":
 
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--data_dir',default=r"C:\tensor_code\kluebot\data\raw\2017_1.csv", help='datadir?',type=str)
+
+    args = parser.parse_args()
+
     komoran = Komoran() 
     print(komoran.morphs(u'졸린데 수업 끝내주세요'))
     print(komoran.nouns(u'모기 물렸다'))
 
-    df=pd.read_csv(r"C:\tensor_code\kluebot\data\prep\2017_1_pre")
+    df=pd.read_csv(r"C:\tensor_code\kluebot\data\raw\2017_1.csv")
+    
     df_art=df[df.Classification=='교양']
 
+
+
     #이 부분 바꿔야됨
+    print(args.data_dir)
+    if 'raw' in args.data_dir:
+        df_art['keyword_sent']=df_art['LectureEval']
     df_new=df_art['keyword_sent'].apply(lambda x:prepro().documentize(x))   
+      
     df_extract=pd.concat([df_art['className'],df_new],axis=1).dropna().reset_index(drop=True)
 
 
@@ -88,6 +101,11 @@ if __name__=="__main__":
     print(len(vocab))
 
     lec_vec=dict(zip(df_extract['className'],tfidf))
+
+
+    with open('./lec_vec_2017_1','wb') as f:
+        pickle.dump(lec_vec,f)
+
 
 
 
