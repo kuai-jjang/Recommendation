@@ -116,12 +116,12 @@ if __name__=="__main__":
             optimizer.zero_grad()
             inputs=data[0].to(device)
             targets=data[1].to(device)
-            outputs=model.forward(inputs,targets).to(device)
+            outputs=model.forward(inputs,targets)
             loss=negative_sampling(*outputs)
             loss.backward()
             optimizer.step()
             running_loss+=loss.item()
-            print(running_loss)
+           
             if (i+1) % 500 == 0:    # print every 2000 mini-batches
                 running_loss=running_loss/500
                 print('[%d, %5d] loss: %.5f' %(epoch + 1, i + 1, running_loss))
