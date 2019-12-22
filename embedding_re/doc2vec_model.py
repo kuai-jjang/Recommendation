@@ -18,9 +18,13 @@ class doc2vec(nn.Module):
     def forward(self, inputs, target):
 
         batch_size = target.size()[0]
+
+        print(3)
  
 
         doc_id=torch.LongTensor(inputs[:,0].unsqueeze(1))
+
+        print(4)
         context=inputs[:,1:]
 
         lec_vec=self.lecture(doc_id)
