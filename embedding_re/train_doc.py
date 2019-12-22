@@ -114,13 +114,16 @@ if __name__=="__main__":
         
         print('epoch',epoch)
         for i,data in enumerate(my_dataloader,0):
-            print(i,data)
+        
+
             optimizer.zero_grad()
             inputs=data[0].to(device)
             targets=data[1].to(device)
+            print('1')
             outputs=model.forward(inputs,targets)
+            print('2')
             loss=negative_sampling(*outputs)
-            print('loss',loss)
+
             loss.backward()
             optimizer.step()
             running_loss+=loss.item()
