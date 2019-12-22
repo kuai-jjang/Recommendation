@@ -136,7 +136,7 @@ if __name__=="__main__":
              
             labels=labels.to(device)
             inputs=inputs.to(device)
-
+            
             optimizer.zero_grad()
 
             # outputs=model(inputs).view(batchsize,-1).to(device)
