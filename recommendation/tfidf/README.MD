@@ -21,3 +21,5 @@ python apply_tfidf.py --dir C:\\tensor_code\\kluebot\\data\\prep\\2017_1_1 --cla
 <img src="../../embedding/output/tf_idf_doc.png" width="250">
 
 
+## L2 distance에 기반한 추천 예시
+<img src="../../embedding/output/tf_idf_1.png" width="250">
