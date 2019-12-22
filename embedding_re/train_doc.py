@@ -114,7 +114,9 @@ if __name__=="__main__":
 
         for i,data in enumerate(my_dataloader,0):
             optimizer.zero_grad()
-            outputs=model.forward(data[0],data[1]).to(device)
+            inputs=data[0].to(device)
+            targets=data[1].to(device)
+            outputs=model.forward(inputs,targets).to(device)
             loss=negative_sampling(*outputs)
             loss.backward()
             optimizer.step()
