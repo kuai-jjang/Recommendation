@@ -15,16 +15,15 @@ class doc2vec(nn.Module):
         self.freq_dic=torch.tensor(freq_dic)
 
 
-    def forward(self, inputs, target):
+    def forward(self, inputs, target,device):
 
         batch_size = target.size()[0]
 
-        print(3)
  
 
-        doc_id=torch.LongTensor(inputs[:,0].unsqueeze(1))
+        doc_id=torch.LongTensor(inputs[:,0].unsqueeze(1)).to(device)
 
-        print(4)
+       
         context=inputs[:,1:]
 
         lec_vec=self.lecture(doc_id)
