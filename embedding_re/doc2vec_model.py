@@ -46,7 +46,7 @@ def negative_sampling(d_vec,target_vec,n_vec):
 
     batch_size=target_vec.shape[0]
     o_loss=torch.bmm(d_vec,target_vec.view(batch_size,-1,1)).sigmoid().log().mean().neg()
-    n_loss=torch.bmm(d_vec,n_vec).sigmoid().log().mean().neg()
+    n_loss=torch.bmm(d_vec,n_vec).sigmoid().log().mean().neg().to(device)
     loss=o_loss+n_loss
 
     return loss.mean()  #batch니까 mean
