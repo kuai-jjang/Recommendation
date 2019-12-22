@@ -42,7 +42,7 @@ class doc2vec(nn.Module):
 
 
 
-def negative_sampling(device,d_vec,target_vec,n_vec):
+def negative_sampling(d_vec,target_vec,n_vec):
 
     batch_size=target_vec.shape[0]
     o_loss=torch.bmm(d_vec,target_vec.view(batch_size,-1,1)).sigmoid().log().mean().neg()
