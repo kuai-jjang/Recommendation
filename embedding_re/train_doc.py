@@ -122,7 +122,7 @@ if __name__=="__main__":
   
             outputs=model.forward(inputs,targets,device)
       
-            loss=negative_sampling(*outputs)
+            loss=negative_sampling(*outputs,device)
 
             loss.backward()
             optimizer.step()
