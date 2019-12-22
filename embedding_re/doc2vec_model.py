@@ -18,11 +18,9 @@ class doc2vec(nn.Module):
     def forward(self, inputs, target,device):
 
         batch_size = target.size()[0]
-
-        print(1)
     
         doc_id=inputs[:,0].unsqueeze(1)
-        print(2)
+     
        
         context=inputs[:,1:]
 
