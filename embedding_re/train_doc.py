@@ -30,7 +30,7 @@ if __name__=="__main__":
 
 
 
-    parser.add_argument('--epoch',default=3, help='epoch?',type=int)
+    parser.add_argument('--epoch',default=5, help='epoch?',type=int)
     parser.add_argument('--lr',default=0.0001, help='lr?',type=float)
     parser.add_argument('--early_stopping',default=10, help='early_stopping?',type=int)
 
@@ -108,17 +108,19 @@ if __name__=="__main__":
     running_loss=99
     previous_running_loss=100
 
-    print('start')
+
 
     for epoch in range(start_epoch,epochs+1):
         
-
+        print('epoch',epoch)
         for i,data in enumerate(my_dataloader,0):
+            print(i,data)
             optimizer.zero_grad()
             inputs=data[0].to(device)
             targets=data[1].to(device)
             outputs=model.forward(inputs,targets)
             loss=negative_sampling(*outputs)
+            print('loss',loss)
             loss.backward()
             optimizer.step()
             running_loss+=loss.item()
