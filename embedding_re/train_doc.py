@@ -119,9 +119,9 @@ if __name__=="__main__":
             optimizer.zero_grad()
             inputs=data[0].to(device)
             targets=data[1].to(device)
-            print('1')
+  
             outputs=model.forward(inputs,targets,device)
-            print('2')
+      
             loss=negative_sampling(*outputs)
 
             loss.backward()

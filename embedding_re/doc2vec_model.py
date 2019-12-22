@@ -19,10 +19,10 @@ class doc2vec(nn.Module):
 
         batch_size = target.size()[0]
 
- 
+        print(1)
 
         doc_id=torch.LongTensor(inputs[:,0].unsqueeze(1)).to(device)
-
+        print(2)
        
         context=inputs[:,1:]
 
