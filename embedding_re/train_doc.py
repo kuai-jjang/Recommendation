@@ -44,7 +44,7 @@ if __name__=="__main__":
         dataset=pickle.load(f)
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    emb_model=torch.load(args.embedding_model)['state_dict'].to(device)
+    emb_model=torch.load(args.embedding_model)['state_dict']['embedding_in.weight'].to(device)
     lecture_len=len(doc_id)
     print('document size : ',lecture_len)
 
