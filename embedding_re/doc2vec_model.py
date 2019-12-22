@@ -31,7 +31,7 @@ class doc2vec(nn.Module):
         target_vec=self.word_emb[target].unsqueeze(1).to(device)
 
         nwords=torch.multinomial(self.freq_dic,batch_size*self.n).view(batch_size,self.n)  
-        n_vec=self.word_emb[nwords].neg().view(batch_size,-1,self.n)
+        n_vec=self.word_emb[nwords].neg().view(batch_size,-1,self.n).to(device)
 
         d_vec=torch.cat((lec_vec,context_vec),1).mean(1).unsqueeze(1)
         
@@ -42,11 +42,11 @@ class doc2vec(nn.Module):
 
 
 
-def negative_sampling(d_vec,target_vec,n_vec,device):
+def negative_sampling(device,d_vec,target_vec,n_vec):
 
     batch_size=target_vec.shape[0]
     o_loss=torch.bmm(d_vec,target_vec.view(batch_size,-1,1)).sigmoid().log().mean().neg()
-    n_loss=torch.bmm(d_vec,n_vec).sigmoid().log().mean().neg().to(device)
+    n_loss=torch.bmm(d_vec,n_vec).sigmoid().log().mean().neg()
     loss=o_loss+n_loss
 
     return loss.mean()  #batch니까 mean
