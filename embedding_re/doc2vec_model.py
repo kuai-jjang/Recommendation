@@ -10,7 +10,7 @@ class doc2vec(nn.Module):
         self.lecture_len=lecture_len
         self.lecuter_dim=lecture_dim
         self.lecture = nn.Embedding(lecture_len,lecture_dim)
-        self.word_emb=model['embedding_in.weight']  #.detach()
+        self.word_emb=model  #.detach()
 
         self.out_layer=nn.Embedding(self.word_emb.shape[0],lecture_dim)
         self.n=ns
