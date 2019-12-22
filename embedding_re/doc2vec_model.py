@@ -29,8 +29,7 @@ class doc2vec(nn.Module):
         lec_vec=self.lecture(doc_id).to(device)
 
         context_vec=self.word_emb[context].to(device)
-        print(target)
-
+    
         target_vec=self.out_layer(target.unsqueeze(1)).to(device)
 
         nwords=torch.multinomial(self.freq_dic,batch_size*self.n).view(batch_size,self.n)  
