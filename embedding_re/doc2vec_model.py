@@ -11,7 +11,7 @@ class doc2vec(nn.Module):
         self.lecuter_dim=lecture_dim
         self.lecture = nn.Embedding(lecture_len,lecture_dim)
         self.word_emb=model['embedding_in.weight'].detach()
-        print(self.word_emb.shape[0])
+
         self.out_layer=nn.Embedding(self.word_emb.shape[0],lecture_dim)
         self.n=ns
         self.freq_dic=torch.tensor(freq_dic)
@@ -32,7 +32,7 @@ class doc2vec(nn.Module):
     
         target_vec=self.out_layer(target.unsqueeze(1)).to(device)
 
-        nwords=torch.multinomial(self.freq_dic,batch_size*self.n).view(batch_size,self.n)  
+        nwords=torch.multinomial(self.freq_dic,batch_size*self.n).view(batch_size,self.n).to(device)
         n_vec=self.out_layer(nwords).neg().view(batch_size,-1,self.n).to(device)
 
         d_vec=torch.cat((lec_vec,context_vec),1).mean(1).unsqueeze(1)
