@@ -42,8 +42,9 @@ if __name__=="__main__":
         doc_id=pickle.load(f)
     with open(args.docskipgram_dir,'rb') as f:
         dataset=pickle.load(f)
-    
-    emb_model=torch.load(args.embedding_model,map_location='cpu')['state_dict']
+
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    emb_model=torch.load(args.embedding_model)['state_dict'].to(device)
     lecture_len=len(doc_id)
     print('document size : ',lecture_len)
 
@@ -84,7 +85,7 @@ if __name__=="__main__":
     batchsize=16
     my_dataloader = DataLoader(my_dataset,batch_size=batchsize,shuffle = True,drop_last=True) #create your dataloader
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=0.9)
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    
 
 
     if len(args.load_dir)>1:
