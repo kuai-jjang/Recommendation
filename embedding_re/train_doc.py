@@ -26,6 +26,8 @@ if __name__=="__main__":
     parser.add_argument('--embedding_model',default='./training_with_mecab_2018_2_epoch_14', help='model?',type=str)
     parser.add_argument('--load_dir',default='.', help='load directory?',type=str)
     parser.add_argument('--vocabfreq_dir',default="./preprocessing/vocab_mecab_multi_freq.pickle", help='vocabfreq dir?',type=str)
+    parser.add_argument('--save_dir',default="./doc2vec_2017_1", help='vocabfreq dir?',type=str)
+
 
 
     parser.add_argument('--epoch',default=3, help='epoch?',type=int)
