@@ -108,6 +108,7 @@ if __name__=="__main__":
     running_loss=99
     previous_running_loss=100
 
+    print('start')
 
     for epoch in range(start_epoch,epochs+1):
         
