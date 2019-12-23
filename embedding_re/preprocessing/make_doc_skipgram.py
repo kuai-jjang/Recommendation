@@ -25,13 +25,13 @@ class tokenizing:
         
         self.window_size=3
 
-    def make_pos(self,x):
+    def make_pos(self,x,remove_pos):
         self.step+=1
         if self.step%499==0:
             print(self.step)
         for i in x['LectureEval']:
             a=self.tokenizer.pos(i)
-            a=list(filter(lambda x:x[1] not in ['Josa','Suffix','Foreign','Punctuation'],a))
+            a=list(filter(lambda x:x[1][0] not in remove_pos and x[1] not in remove_pos,a))
             self.update_(x['doc_name'],a)
             
     def update_(self,x,a):
@@ -86,14 +86,15 @@ if __name__=='__main__':
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--data_dir',default=r"C:\tensor_code\kluebot\data\raw\2017_1.csv", help='datadir?',type=str)
+    parser.add_argument('--data_dir',default=r"C:\tensor_code\kluebot\data\raw\2017_2.csv", help='datadir?',type=str)
 
     args = parser.parse_args()
 
 
     my_data=pd.read_csv(args.data_dir)
     lecture_sentences=preprocessing(my_data.LectureEval.values)
-    
+    remove_pos=remove_pos=['J','E','X','SF','SE','SSO','SSC','SC','SY']
+
     sem=args.data_dir.split('\\')[-1][:-4]
     
     tokenizer=Mecab()
@@ -114,7 +115,7 @@ if __name__=='__main__':
     w2i_default=defaultdict(lambda:vocab_size,w2i)
 
     hehe=tokenizing(tokenizer,trial,doc_id,w2i_default)
-    trial.apply(lambda x:hehe.make_pos(x),axis=1)
+    trial.apply(lambda x:hehe.make_pos(x,remove_pos),axis=1)
 
     with open('./doc_skipgram_idx_'+sem+'.pickle','wb') as f:
         pickle.dump(hehe.doc_set,f)
