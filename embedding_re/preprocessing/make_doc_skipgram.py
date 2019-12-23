@@ -30,8 +30,8 @@ class tokenizing:
         if self.step%499==0:
             print(self.step)
         for i in x['LectureEval']:
-            a=self.tokenizer.pos(i)
-            a=list(filter(lambda x:x[1][0] not in remove_pos and x[1] not in remove_pos,a))
+            i=self.tokenizer.pos(i)
+            a=list(filter(lambda x:x[1][0] not in remove_pos and x[1] not in remove_pos,i))
             self.update_(x['doc_name'],a)
             
     def update_(self,x,a):
@@ -86,7 +86,7 @@ if __name__=='__main__':
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--data_dir',default=r"C:\tensor_code\kluebot\data\raw\2017_2.csv", help='datadir?',type=str)
+    parser.add_argument('--data_dir',default=r"C:\tensor_code\kluebot\data\raw\2017_1.csv", help='datadir?',type=str)
 
     args = parser.parse_args()
 

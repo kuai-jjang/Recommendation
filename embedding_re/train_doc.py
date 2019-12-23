@@ -19,10 +19,10 @@ def making_db(x):
 if __name__=="__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--docid_dir',default='./preprocessing/doc_id_2017_1.pickle', help='doc_id?',type=str)
-    parser.add_argument('--docskipgram_dir',default='./preprocessing/doc_skipgram_idx_2017_1.pickle', help='vocab?',type=str)
+    parser.add_argument('--docid_dir',default='./preprocessing/doc_id_2017_2.pickle', help='doc_id?',type=str)
+    parser.add_argument('--docskipgram_dir',default='./preprocessing/doc_skipgram_idx_2017_2.pickle', help='vocab?',type=str)
     parser.add_argument('--make_training',default=False, help='make training_set?',type=bool)
-    parser.add_argument('--training_set',default='./doc2vec_training_set_2017_1.pickle', help='training_set?',type=str)
+    parser.add_argument('--training_set',default='./doc2vec_training_set_2017_2.pickle', help='training_set?',type=str)
     parser.add_argument('--embedding_model',default='./training_with_mecab_2018_2_epoch_14', help='model?',type=str)
     parser.add_argument('--load_dir',default='.', help='load directory?',type=str)
     parser.add_argument('--vocabfreq_dir',default="./preprocessing/vocab_mecab_multi_freq.pickle", help='vocabfreq dir?',type=str)

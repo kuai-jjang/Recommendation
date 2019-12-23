@@ -9,7 +9,9 @@ import argparse
 import re
 import pickle
 from sklearn.decomposition import PCA
+import pickle
 from eunjeon import Mecab
+
 
 
 # class prepro:
@@ -182,6 +184,9 @@ if __name__=="__main__":
     df_new=pd.concat([df_extract.reset_index(drop=True),data.reset_index(drop=True)],axis=1,ignore_index=True)
     df_new.to_csv('./lecture_vector_'+sem+'.csv',index=False)
 
+    with open('./voacb_'+sem+'.pickle','wb') as f:
+        pickle.dump(vocab,f)
+        
     # with open('./lec_vec_2017_1','wb') as f:
     #     pickle.dump(lec_vec,f)
     idx=random.randint(1,df_new.shape[0])
