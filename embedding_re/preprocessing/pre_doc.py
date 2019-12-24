@@ -26,7 +26,7 @@ if __name__=="__main__":
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--data_dir',default=r"C:\tensor_code\kluebot\data\raw\2017_2.csv", help='datadir?',type=str)
+    parser.add_argument('--data_dir',default=r"C:\tensor_code\kluebot\data\raw\2017_1.csv", help='datadir?',type=str)
 
     args = parser.parse_args()
     sem=args.data_dir.split('\\')[-1][:-4]
