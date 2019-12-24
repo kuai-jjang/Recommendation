@@ -15,9 +15,7 @@ def main(driver):
     sem=[]
     classtype=[]
     idx=0
-    step=0
-    for i in range(72967,75527,1):
-        step+=1
+    for i in range(71967,75527,1):
         star.append([])
         classname.append([])
         sem.append([])
@@ -39,15 +37,6 @@ def main(driver):
             idx+=1
         except:
             continue
-        if step%1000==0:   #backup
-            df=pd.DataFrame(star,columns=['chulseok','grade','difficulty','load','achievement'])
-            df['proff']=pd.DataFrame(proff)
-            df['className']=pd.DataFrame(classname)
-            df['sem']=pd.DataFrame(sem)
-            df['classtype']=pd.DataFrame(classtype)
-            df.to_csv('./stargazing_2017_1_2.csv',encoding='utf-8',index=False)
-            with open('./here.txt','w') as f:
-                f.write(str(i))
 
     df=pd.DataFrame(star,columns=['chulseok','grade','difficulty','load','achievement'])
     df['proff']=pd.DataFrame(proff)
