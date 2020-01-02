@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
-from konlpy.tag import Komoran 
+from konlpy.tag import Komoran,Okt
 import ast
 import collections
 import copy
@@ -11,6 +11,7 @@ import pickle
 from sklearn.decomposition import PCA
 import pickle
 from eunjeon import Mecab
+
 
 
 
@@ -133,14 +134,15 @@ if __name__=="__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--data_dir',default=r"C:\tensor_code\kluebot\data\raw\2018_2.csv", help='datadir?',type=str)
-    parser.add_argument('--classtype',default="교양", help='type?',type=str)
+    parser.add_argument('--classtype',default="all", help='type?',type=str)
 
     args = parser.parse_args()
 
     sem=args.data_dir.split('\\')[-1][:-4]
 
     #komoran = Komoran() 
-    tokenizer=Mecab()
+    #tokenizer=Mecab()
+    tokenizer=Okt()
     print(tokenizer.pos(u'졸린데 수업 끝내주세요'))
     print(tokenizer.nouns(u'모기 물렸다'))
 
@@ -155,8 +157,8 @@ if __name__=="__main__":
     if 'raw' in args.data_dir:
         df_art['keyword_sent']=df_art['LectureEval']
 
-    remove_pos=['J','E','X','SF','SE','SSO','SSC','SC','SY']
-
+    #remove_pos=['J','E','X','SF','SE','SSO','SSC','SC','SY']
+    remove_pos=['Josa','Suffix','Foreign','Punctuation']
 
     M=preprocessing(df_art['keyword_sent'].values,tokenizer,remove_pos,df_start_idx)
     lecture_sentences,drop_idexes=M.prepro()
@@ -182,9 +184,9 @@ if __name__=="__main__":
     data=pd.DataFrame(tfidf)
  
     df_new=pd.concat([df_extract.reset_index(drop=True),data.reset_index(drop=True)],axis=1,ignore_index=True)
-    df_new.to_csv('./lecture_vector_'+sem+'.csv',index=False)
+    df_new.to_csv('./lecture_vector_okt_'+sem+'.csv',index=False)
 
-    with open('./voacb_'+sem+'.pickle','wb') as f:
+    with open('./voacb_okt_'+sem+'.pickle','wb') as f:
         pickle.dump(vocab,f)
         
     # with open('./lec_vec_2017_1','wb') as f:
