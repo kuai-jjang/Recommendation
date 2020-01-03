@@ -184,9 +184,9 @@ if __name__=="__main__":
     data=pd.DataFrame(tfidf)
  
     df_new=pd.concat([df_extract.reset_index(drop=True),data.reset_index(drop=True)],axis=1,ignore_index=True)
-    df_new.to_csv('./lecture_vector_okt_'+sem+'.csv',index=False)
+    df_new.to_csv('./lecture_vector/lecture_vector_okt_'+sem+'.csv',index=False)
 
-    with open('./voacb_okt_'+sem+'.pickle','wb') as f:
+    with open('./vocab/voacb_okt_'+sem+'.pickle','wb') as f:
         pickle.dump(vocab,f)
         
     # with open('./lec_vec_2017_1','wb') as f:
