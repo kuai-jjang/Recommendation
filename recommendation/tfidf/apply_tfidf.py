@@ -41,6 +41,7 @@ class tf_idf:
     def __init__(self,x):  #x: lectures
         self.cont=x
     def cal_tf(self):
+        print(self.cont.head())
         tfidfv = TfidfVectorizer(max_df=0.9,min_df=0.2).fit(self.cont.values)   #transform: 행렬변환, max_df: 0.9할 이상의 doc에서 나오는 단어 삭제
         tfidf=tfidfv.transform(self.cont.values).toarray()
         vocab=tfidfv.vocabulary_
@@ -55,7 +56,7 @@ class recommend:
         self.idx=idx
         self.metric=func_dict[metric]
         pca = PCA(n_components=10)
-        lec_vectors=data[data.columns[2:]].values if not pca_1 else pca.fit_transform(data[data.columns[2:]].values)
+        lec_vectors=data[data.columns[4:]].values if not pca_1 else pca.fit_transform(data[data.columns[4:]].values)
         self.lec_vec=dict(zip(data[data.columns[0]],lec_vectors))
  
 
@@ -144,7 +145,7 @@ if __name__=="__main__":
     #tokenizer=Mecab()
     tokenizer=Okt()
     print(tokenizer.pos(u'졸린데 수업 끝내주세요'))
-    print(tokenizer.nouns(u'모기 물렸다'))
+    print(tokenizer.nouns(u'모기 물렸다')
 
     df=pd.read_csv(args.data_dir)
     
@@ -173,11 +174,10 @@ if __name__=="__main__":
 
 
 
-    df_art['doc_id']=list(zip(df_art['ProfessorName'],df_art['className']))
+    df_art['doc_id']=list(zip(df_art['ProfessorName'],df_art['AcademicNumber']))
 
-    df_extract=pd.concat([df_art['doc_id'],df_art['pos_sent']],axis=1).reset_index(drop=True)
-    
-
+    df_extract=pd.concat([df_art[['ProfessorName','className','AcademicNumber']],df_art['pos_sent']],axis=1).reset_index(drop=True)
+  
 
     tfidf,vocab=tf_idf(df_extract['pos_sent']).cal_tf()
   

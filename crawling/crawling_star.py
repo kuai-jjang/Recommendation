@@ -16,7 +16,7 @@ def main(driver):
     classtype=[]
     idx=0
     step=0
-    for i in range(72967,75527,1):
+    for i in range(77935,79877,1):   #17-2 79876까지 하면됨
         step+=1
         star.append([])
         classname.append([])
@@ -45,16 +45,16 @@ def main(driver):
             df['className']=pd.DataFrame(classname)
             df['sem']=pd.DataFrame(sem)
             df['classtype']=pd.DataFrame(classtype)
-            df.to_csv('./stargazing_2017_1_2.csv',encoding='utf-8',index=False)
+            df.to_csv('./stargazing_2017_2_2.csv',encoding='utf-8',index=False)
             with open('./here.txt','w') as f:
                 f.write(str(i))
 
-    df=pd.DataFrame(star,columns=['chulseok','grade','difficulty','load','achievement'])
-    df['proff']=pd.DataFrame(proff)
-    df['className']=pd.DataFrame(classname)
-    df['sem']=pd.DataFrame(sem)
-    df['classtype']=pd.DataFrame(classtype)
-    df.to_csv('./stargazing_2017_1.csv',encoding='utf-8',index=False)
+    df_2=pd.DataFrame(star,columns=['chulseok','grade','difficulty','load','achievement'])
+    df_2['proff']=pd.DataFrame(proff)
+    df_2['className']=pd.DataFrame(classname)
+    df_2['sem']=pd.DataFrame(sem)
+    df_2['classtype']=pd.DataFrame(classtype)
+    df_2.to_csv('./stargazing_2017_2_3.csv',encoding='utf-8',index=False)
     
 
 if __name__=="__main__":
